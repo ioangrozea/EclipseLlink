@@ -7,6 +7,10 @@ addons:
     branches:
       - master
       - develop
+  sonarcloud:
+      organization: "Ioan Grozea"
+      token:
+        secure: 2f3bdd2595e8ede5a2c34c403ee9f24528af2c28
 notifications:
   email: false
   on_success: never

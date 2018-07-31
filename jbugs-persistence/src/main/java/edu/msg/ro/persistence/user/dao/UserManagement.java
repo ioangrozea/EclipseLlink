@@ -1,11 +1,15 @@
 package edu.msg.ro.persistence.user.dao;
 
 import edu.msg.ro.persistence.user.entity.User;
+
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-public class UserManagment implements Management<User> {
+@Stateless
+public class UserManagement implements Management<User> {
+
     @PersistenceContext(unitName = "jbugs-persistence")
     private EntityManager entityManager;
 

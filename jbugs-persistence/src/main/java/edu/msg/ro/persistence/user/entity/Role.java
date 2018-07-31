@@ -1,40 +1,32 @@
 package edu.msg.ro.persistence.user.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Role {
     @Id
-    private Integer idRole;
-    private RoleType roleType;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idRole;
+    private String type;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<User> users;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Permission> permissions;
 
-    @ManyToMany
-    private List<Permissions> permissions;
-
-    public Integer getIdRole() {
+    public long getIdRole() {
         return idRole;
     }
 
-    public void setIdRole(Integer idRole) {
+    public void setIdRole(long idRole) {
         this.idRole = idRole;
     }
 
-    public RoleType getRoleType() {
-        return roleType;
+    public String getType() {
+        return type;
     }
 
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-
-    public List<Permissions> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(List<Permissions> permissions) {
-        this.permissions = permissions;
+    public void setType(String type) {
+        this.type = type;
     }
 }

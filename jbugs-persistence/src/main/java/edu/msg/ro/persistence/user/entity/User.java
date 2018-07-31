@@ -4,31 +4,27 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@NamedQueries({
-        @NamedQuery(name = "getAllUsers", query = "select u from User u")
-})
 public class User {
-
     @Id
-    @GeneratedValue
-    private Integer idUser;
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long idUser;
     private String firstName;
     private String lastName;
     private String mobileNumber;
     private String email;
     private String username;
     private String password;
-    private Status status;
-
-    @ManyToMany
+    private String status;
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Role> roles;
 
-    public Integer getIdUser() {
+    public void setActive(boolean active){}
+
+    public long getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(long idUser) {
         this.idUser = idUser;
     }
 
@@ -52,8 +48,8 @@ public class User {
         return mobileNumber;
     }
 
-    public void setMobileNumber(String mabileNumber) {
-        this.mobileNumber = mabileNumber;
+    public void setMobileNumber(String mobileNumber) {
+        this.mobileNumber = mobileNumber;
     }
 
     public String getEmail() {
@@ -80,19 +76,11 @@ public class User {
         this.password = password;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
-    }
-
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
     }
 }

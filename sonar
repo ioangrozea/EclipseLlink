@@ -1,0 +1,6 @@
+2f3bdd2595e8ede5a2c34c403ee9f24528af2c28
+
+mvn sonar:sonar \
+  -Dsonar.organization=ioangrozea-github \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.login=6112218d9ec8b8a4a51dc38e2c79d9a0642119ac

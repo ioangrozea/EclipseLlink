@@ -6,4 +6,6 @@
 **/.idea/
 /**/target
 
+# IntelliJ
+out/
 *.iml

@@ -1,12 +1,10 @@
-package dao;
+package edu.msg.ro.persistence.user.dao;
 
 import edu.msg.ro.persistence.user.entity.Role;
 import edu.msg.ro.persistence.user.entity.User;
 
-import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import java.util.List;
 
 public class UserManagementImpl implements UserManagement {

@@ -1,6 +1,8 @@
 package edu.msg.ro.persistence.user.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,8 +13,11 @@ public class User {
     private String firstName;
     private String lastName;
     private String mobileNumber;
+    @CustomEmailValidator
     private String email;
+    @NotNull
     private String username;
+    @Size(min = 4, max = 10)
     private String password;
     private String status;
     @ManyToMany(cascade = CascadeType.ALL)

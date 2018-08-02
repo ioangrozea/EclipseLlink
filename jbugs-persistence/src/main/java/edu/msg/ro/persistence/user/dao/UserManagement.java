@@ -1,40 +1,32 @@
 package edu.msg.ro.persistence.user.dao;
 
+import edu.msg.ro.persistence.user.entity.Role;
 import edu.msg.ro.persistence.user.entity.User;
 
-import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.ejb.Remote;
+import java.io.Serializable;
 import java.util.List;
 
-@Stateless
-public class UserManagement implements Management<User> {
+@Remote
+public interface UserManagement extends Serializable {
 
-    @PersistenceContext(unitName = "jbugs-persistence")
-    private EntityManager entityManager;
+    void addUser(User user);
 
-    @Override
-    public void addEntity(User entity) {
-        entityManager.persist(entity);
-    }
+    User updateUser(User user);
 
-    @Override
-    public void updateEntity(User entity) {
-        entityManager.merge(entity);
-    }
+    List<User> getAllUsers();
 
-    @Override
-    public void deleteEntity(User entity) {
-        entityManager.remove(entity);
-    }
+    User getUserForUsername(String username);
 
-    @Override
-    public User getById(Integer id) {
-        return entityManager.find(User.class, id);
-    }
+    void deactivateUser(Long id);
 
-    @Override
-    public List<User> getAllEntities() {
-        return entityManager.createNamedQuery("getAllUsers", User.class).getResultList();
-    }
+    void addRole(Role role);
+
+    void removeRole(Role role);
+
+    Role updateRole(Role role);
+
+    Role getRolerForId(Long id);
+
+    List<Role> getAllRoles();
 }

@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.ejb.EJB;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.msg.ro.persistence.user.entity.User;
+import msg.ejb.AnotherEjb;
 import msg.ejb.SomeEjb;
 
 @WebServlet(urlPatterns = { "/TestServlet" })
@@ -31,6 +35,10 @@ public class TestServlet extends HttpServlet {
 	 * @throws IOException
 	 *             if an I/O error occurs
 	 */
+
+    @EJB
+    private AnotherEjb anotherEjb;
+
 	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
 
@@ -43,7 +51,7 @@ public class TestServlet extends HttpServlet {
 			out.println("</head>");
 			out.println("<body>");
 			out.println(someEjbBean.hello() + "<br>");
-
+			anotherEjb.doSomething();
 			out.println("</body>");
 			out.println("</html>");
 		}

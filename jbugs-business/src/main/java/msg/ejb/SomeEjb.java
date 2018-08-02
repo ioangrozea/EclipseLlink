@@ -14,5 +14,4 @@ public class SomeEjb {
 		return "Hello JPA World!";
 	}
 
-
 }

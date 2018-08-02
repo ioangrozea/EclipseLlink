@@ -2,61 +2,90 @@ package edu.msg.ro.persistence.user.dao;
 
 import edu.msg.ro.persistence.user.entity.Permission;
 import edu.msg.ro.persistence.user.entity.Role;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
+@Stateless(name = "PermissionManagementImpl", mappedName = "PermissionManagementImpl")
 public class PermissionManagementImpl implements PermissionManagement {
 
+    private static final Logger logger = LogManager.getLogger(PermissionManagementImpl.class);
+
     @PersistenceContext(unitName = "jbugs-persistence")
-    private
-    EntityManager entityManager;
+    private EntityManager em;
 
     @Override
-    public Permission createPermission(Permission permission) {
-        entityManager.persist(permission);
+    public Permission addPermission(Permission permission) {
+        logger.log(Level.ERROR, "aaaaaaaaaaa");
+        em.persist(permission);
         return permission;
     }
 
     @Override
-    public List<Permission> getAllPermission() {
-        Query q = entityManager.createQuery("select P from Permission p");
-        return q.getResultList();
+    public Permission updatePermission(Permission permission) {
+        em.merge(permission);
+        return permission;
     }
 
     @Override
-    public Permission getPermissionById(long id) {
-        return entityManager.find(Permission.class, id);
+    public boolean removePermissionById(long id) {
+        Permission permission = getPermissionForId(id);
+        if (permission == null)
+            return false;
+        em.remove(permission);
+        return true;
     }
 
     @Override
-    public List<Permission> getPermissionByRole(Role role) {
-        return null;
-    }
-
-    @Override
-    public void createPermissionForRole(Role role, Permission permission) {
+    public boolean removePermissionForRole(Role role, Permission permission) {
+        em.persist(role);
+        List<Permission> permissions = getPermissionsForRole(role);
+        return permissions.remove(permission);
 
     }
 
-    // TODO: 7/31/2018 if the remove does not work but the obj exists it will be still true returned
     @Override
-    public boolean deletePermissionById(long id) {
-        Optional<Permission> permissionById = Optional.ofNullable(getPermissionById(id));
-        permissionById.ifPresent(x -> entityManager.remove(permissionById));
-        return permissionById.isPresent();
+    public boolean removeAllPermissionsForRole(Role role) {
+        em.persist(role);
+        List<Permission> permissions = getPermissionsForRole(role);
+        permissions.clear();
+        return true;
     }
 
     @Override
-    public boolean deletePermissionForRole(String type, Role role) {
-        return false;
+    public Permission getPermissionForId(long id) {
+        Query query = em.createQuery("SELECT p FROM Permission p WHERE p.id=:id");
+        query.setParameter("id", id);
+        return (Permission) query.getSingleResult();
     }
 
     @Override
-    public boolean deleteAllPermissionsForRole(Role role) {
-        return false;
+    public List<Permission> getPermissionsForRole(Role role) {
+        Query query = em.createQuery("SELECT r.permissions FROM Role r WHERE r=:role");
+        query.setParameter("role", role);
+        return query.getResultList();
+
+    }
+
+    @Override
+    public List<Permission> getAllPermissions() {
+        Query query = em.createQuery("SELECT p FROM Permission p");
+        return query.getResultList();
+    }
+
+    @Override
+    public Permission createPermissionForRole(Role role, Permission permission) {
+        List<Permission> permissions = new ArrayList<>();
+        permissions.add(permission);
+        role.setPermissions(permissions);
+        em.merge(role);
+        return permission;
     }
 }

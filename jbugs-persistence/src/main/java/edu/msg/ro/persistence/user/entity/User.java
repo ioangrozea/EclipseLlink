@@ -1,36 +1,70 @@
 package edu.msg.ro.persistence.user.entity;
 
+
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idUser;
+@Table(name = "users")
+public class User extends BaseEntity<Long> {
+
+    @Transient
+    private final static int MAX_STRING_LENGTH = 20;
+
+    @Column(name = "firstName", length = MAX_STRING_LENGTH, nullable = false)
     private String firstName;
+
+    @Column(name = "lastName", length = MAX_STRING_LENGTH, nullable = false)
     private String lastName;
+
+    @Column(name = "mobileNumber", length = MAX_STRING_LENGTH, nullable = false)
     private String mobileNumber;
-    @CustomEmailValidator
+
+    //TODO CONSTRAINT PE FORMAT
+    @Column(name = "email", length = MAX_STRING_LENGTH, nullable = false, unique = true)
     private String email;
-    @NotNull
+
+    //TODO GENERAT AUTOMAT
+    @Column(name = "username", length = MAX_STRING_LENGTH, nullable = false, unique = true)
     private String username;
-    @Size(min = 4, max = 10)
+
+    @Column(name = "password", length = MAX_STRING_LENGTH, nullable = false)
     private String password;
+
+    @Column(name = "status", length = MAX_STRING_LENGTH, nullable = false)
     private String status;
+
     @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "uid"),
+            inverseJoinColumns = { @JoinColumn(name = "rid")})
     private List<Role> roles;
 
-    public void setActive(boolean active){}
-
-    public long getIdUser() {
-        return idUser;
+    public User() {
     }
 
-    public void setIdUser(long idUser) {
-        this.idUser = idUser;
+    public User(String firstName, String lastName, String mobileNumber, String email,
+                String username, String password, String status) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+    }
+
+    public User(String firstName, String lastName, String mobileNumber, String email,
+                String username, String password, String status, List<Role> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.mobileNumber = mobileNumber;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.status = status;
+        this.roles = roles;
     }
 
     public String getFirstName() {
@@ -88,4 +122,48 @@ public class User {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(firstName, user.firstName) &&
+                Objects.equals(lastName, user.lastName) &&
+                Objects.equals(mobileNumber, user.mobileNumber) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(status, user.status);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), firstName, lastName, mobileNumber, email, username, password, status);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
 }

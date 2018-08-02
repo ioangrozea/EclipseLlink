@@ -4,23 +4,28 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.ejb.EJB;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import edu.msg.ro.persistence.user.dao.PermissionManagement;
+import edu.msg.ro.persistence.user.dao.UserManagement;
+import edu.msg.ro.persistence.user.entity.Permission;
+import edu.msg.ro.persistence.user.entity.Role;
 import edu.msg.ro.persistence.user.entity.User;
-import msg.ejb.AnotherEjb;
-import msg.ejb.SomeEjb;
 
 @WebServlet(urlPatterns = { "/TestServlet" })
 public class TestServlet extends HttpServlet {
 
+
 	@EJB
-	private SomeEjb someEjbBean;
+	private PermissionManagement permissionManagement;
+
+	@EJB
+	private UserManagement userManagement;
+
 
 	/**
 	 * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,12 +40,17 @@ public class TestServlet extends HttpServlet {
 	 * @throws IOException
 	 *             if an I/O error occurs
 	 */
-
-    @EJB
-    private AnotherEjb anotherEjb;
-
 	protected void processRequest(final HttpServletRequest request, final HttpServletResponse response)
 			throws ServletException, IOException {
+
+
+		Role r1 = new Role("type1");
+		Role r2 = new Role("type2");
+		Permission p1 = new Permission("type1","desc1");
+		Permission p2 = new Permission("type2","desc2");
+
+
+		permissionManagement.addPermission(p1);
 
 		response.setContentType("text/html;charset=UTF-8");
 		try (PrintWriter out = response.getWriter()) {
@@ -50,11 +60,18 @@ public class TestServlet extends HttpServlet {
 			out.println("<title>Test EJB Bean New</title>");
 			out.println("</head>");
 			out.println("<body>");
-			out.println(someEjbBean.hello() + "<br>");
-			anotherEjb.doSomething();
+			out.println(userManagement.getAllUsers());
 			out.println("</body>");
 			out.println("</html>");
 		}
+
+
+		//permissionManagement.addPermission(p1);
+		//permissionManagement.addPermission(p2);
+
+
+		//permissionManagement.addPermission(p1);
+		//permissionManagement.createPermissionForRole(r1,p1);
 	}
 
 	// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on
@@ -105,3 +122,23 @@ public class TestServlet extends HttpServlet {
 		return "Short description";
 	}// </editor-fold>
 }
+
+
+/*
+@Singleton
+@Startup
+class TestingClass{
+
+	@PostConstruct
+	public void printBeforeTime(){
+		System.out.println("BEFORE:: " + java.time.LocalTime.now());
+	}
+
+	@PreDestroy
+	public void printAfterTime(){
+		System.out.println("AFTER:: " + java.time.LocalTime.now());
+	}
+
+
+}
+*/

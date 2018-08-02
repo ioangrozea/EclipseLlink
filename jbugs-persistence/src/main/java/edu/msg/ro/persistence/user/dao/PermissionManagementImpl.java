@@ -5,13 +5,16 @@ import edu.msg.ro.persistence.user.entity.Role;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.spi.LoggerContextFactory;
 
-import javax.ejb.Stateless;
+import javax.ejb.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Stateless(name = "PermissionManagementImpl", mappedName = "PermissionManagementImpl")
 public class PermissionManagementImpl implements PermissionManagement {
@@ -23,7 +26,7 @@ public class PermissionManagementImpl implements PermissionManagement {
 
     @Override
     public Permission addPermission(Permission permission) {
-        logger.log(Level.ERROR, "aaaaaaaaaaa");
+        logger.log(Level.ERROR,"aaaaaaaaaaa");
         em.persist(permission);
         return permission;
     }
@@ -37,7 +40,7 @@ public class PermissionManagementImpl implements PermissionManagement {
     @Override
     public boolean removePermissionById(long id) {
         Permission permission = getPermissionForId(id);
-        if (permission == null)
+        if(permission == null)
             return false;
         em.remove(permission);
         return true;
@@ -62,14 +65,14 @@ public class PermissionManagementImpl implements PermissionManagement {
     @Override
     public Permission getPermissionForId(long id) {
         Query query = em.createQuery("SELECT p FROM Permission p WHERE p.id=:id");
-        query.setParameter("id", id);
+        query.setParameter("id",id);
         return (Permission) query.getSingleResult();
     }
 
     @Override
     public List<Permission> getPermissionsForRole(Role role) {
         Query query = em.createQuery("SELECT r.permissions FROM Role r WHERE r=:role");
-        query.setParameter("role", role);
+        query.setParameter("role",role);
         return query.getResultList();
 
     }

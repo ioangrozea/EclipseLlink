@@ -1,5 +1,6 @@
 package edu.msg.ro.service;
 
+import com.sun.deploy.util.StringUtils;
 import edu.msg.ro.boundary.UserManagement;
 import edu.msg.ro.exceptions.BusinessException;
 import edu.msg.ro.exceptions.ExceptionCode;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Stateless
@@ -72,13 +74,12 @@ public class UserManagementBean implements UserManagement {
         List<String> usernameLike = userPersistenceManagement.getUsersNameLikeUsername(username);
         Optional<Integer> max = usernameLike
                 .stream()
-                .map(s -> Integer.parseInt(s.substring(6, s.length())))
+                .map(x -> x.substring(6, x.length()))
+                .filter(x -> !x.equals(""))
+                .map(Integer::parseInt)
                 .max(Comparator.naturalOrder())
                 .map(x -> x + 1);
-        if (max.isPresent())
-            return max.toString();
-        else
-            return "";
+        return max.map(Object::toString).orElse("");
     }
 
     private boolean isUserValidForCreation(UserDTO userDTO) {

@@ -44,8 +44,8 @@ public class TestServlet extends HttpServlet {
             throws ServletException, IOException {
         UserDTO userDTO = new UserDTO();
         userDTO.setEmail("adsf@msggroup.com");
-        userDTO.setFirstName("asdf");
-        userDTO.setLastName("SADF");
+        userDTO.setFirstName("Dorel");
+        userDTO.setLastName("Dorel");
         userDTO.setPassword("asdsdfdfg");
         userDTO.setPhoneNumber("1234");
         try {

@@ -11,10 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.msg.ro.persistence.user.dao.PermissionManagement;
-import edu.msg.ro.persistence.user.dao.UserManagement;
+import edu.msg.ro.persistence.user.dao.UserPersistanceManagement;
 import edu.msg.ro.persistence.user.entity.Permission;
 import edu.msg.ro.persistence.user.entity.Role;
-import edu.msg.ro.persistence.user.entity.User;
 
 @WebServlet(urlPatterns = { "/TestServlet" })
 public class TestServlet extends HttpServlet {
@@ -24,7 +23,7 @@ public class TestServlet extends HttpServlet {
 	private PermissionManagement permissionManagement;
 
 	@EJB
-	private UserManagement userManagement;
+	private UserPersistanceManagement userPersistanceManagement;
 
 
 	/**
@@ -60,7 +59,7 @@ public class TestServlet extends HttpServlet {
 			out.println("<title>Test EJB Bean New</title>");
 			out.println("</head>");
 			out.println("<body>");
-			out.println(userManagement.getAllUsers());
+			out.println(userPersistanceManagement.getAllUsers());
 			out.println("</body>");
 			out.println("</html>");
 		}

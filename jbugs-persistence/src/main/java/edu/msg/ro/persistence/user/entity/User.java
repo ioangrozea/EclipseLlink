@@ -2,7 +2,6 @@ package edu.msg.ro.persistence.user.entity;
 
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,8 +18,8 @@ public class User extends BaseEntity<Long> {
     @Column(name = "lastName", length = MAX_STRING_LENGTH, nullable = false)
     private String lastName;
 
-    @Column(name = "mobileNumber", length = MAX_STRING_LENGTH, nullable = false)
-    private String mobileNumber;
+    @Column(name = "phoneNumber", length = MAX_STRING_LENGTH, nullable = false)
+    private String phoneNumber;
 
     //TODO CONSTRAINT PE FORMAT
     @Column(name = "email", length = MAX_STRING_LENGTH, nullable = false, unique = true)
@@ -34,7 +33,7 @@ public class User extends BaseEntity<Long> {
     private String password;
 
     @Column(name = "status", length = MAX_STRING_LENGTH, nullable = false)
-    private String status;
+    private boolean status;
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "uid"),
@@ -44,28 +43,7 @@ public class User extends BaseEntity<Long> {
     public User() {
     }
 
-    public User(String firstName, String lastName, String mobileNumber, String email,
-                String username, String password, String status) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobileNumber = mobileNumber;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.status = status;
-    }
 
-    public User(String firstName, String lastName, String mobileNumber, String email,
-                String username, String password, String status, List<Role> roles) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.mobileNumber = mobileNumber;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-        this.status = status;
-        this.roles = roles;
-    }
 
     public String getFirstName() {
         return firstName;
@@ -83,12 +61,12 @@ public class User extends BaseEntity<Long> {
         this.lastName = lastName;
     }
 
-    public String getMobileNumber() {
-        return mobileNumber;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setMobileNumber(String mobileNumber) {
-        this.mobileNumber = mobileNumber;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getEmail() {
@@ -115,11 +93,11 @@ public class User extends BaseEntity<Long> {
         this.password = password;
     }
 
-    public String getStatus() {
+    public boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(boolean status) {
         this.status = status;
     }
 
@@ -139,7 +117,7 @@ public class User extends BaseEntity<Long> {
         User user = (User) o;
         return Objects.equals(firstName, user.firstName) &&
                 Objects.equals(lastName, user.lastName) &&
-                Objects.equals(mobileNumber, user.mobileNumber) &&
+                Objects.equals(phoneNumber, user.phoneNumber) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(username, user.username) &&
                 Objects.equals(password, user.password) &&
@@ -149,7 +127,7 @@ public class User extends BaseEntity<Long> {
     @Override
     public int hashCode() {
 
-        return Objects.hash(super.hashCode(), firstName, lastName, mobileNumber, email, username, password, status);
+        return Objects.hash(super.hashCode(), firstName, lastName, phoneNumber, email, username, password, status);
     }
 
     @Override
@@ -158,7 +136,7 @@ public class User extends BaseEntity<Long> {
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
+                ", mobileNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
